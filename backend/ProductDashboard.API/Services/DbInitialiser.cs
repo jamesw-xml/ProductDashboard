@@ -1,10 +1,39 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Logging;
+using NLog;
+using Npgsql;
+using ILogger = NLog.ILogger;
 
 namespace ProductDashboard.API.Services;
 
 public static class DbInitializer
 {
-    public static void EnsureTables(string connectionString, ILogger logger)
+    public static ILogger Logger => LogManager.GetCurrentClassLogger();
+    public static void EnsureDatabase(string fullConnStr, string targetDb)
+    {
+        var builder = new NpgsqlConnectionStringBuilder(fullConnStr);
+        builder.Database = "postgres";
+        using var adminConn = new NpgsqlConnection(builder.ConnectionString);
+        adminConn.Open();
+
+        var checkSql = $"SELECT 1 FROM pg_database WHERE datname = @dbName";
+        using var checkCmd = new NpgsqlCommand(checkSql, adminConn);
+        checkCmd.Parameters.AddWithValue("dbName", targetDb);
+
+        var exists = checkCmd.ExecuteScalar() != null;
+
+        if (!exists)
+        {
+            Logger.Info($"Database '{targetDb}' does not exist. Creating...");
+            using var createCmd = new NpgsqlCommand($"CREATE DATABASE \"{targetDb}\"", adminConn);
+            createCmd.ExecuteNonQuery();
+            Logger.Info($"Database '{targetDb}' created.");
+        }
+        else
+        {
+            Logger.Info($"Database '{targetDb}' already exists.");
+        }
+    }
+    public static void EnsureTables(string connectionString)
     {
         using var conn = new NpgsqlConnection(connectionString);
         conn.Open();
@@ -22,7 +51,7 @@ public static class DbInitializer
 
         if (!exists)
         {
-            logger.LogInformation("Creating 'products' table...");
+            Logger.Info("Creating 'products' table...");
 
             const string createTableSql = @"
                 CREATE TABLE public.products (
@@ -39,11 +68,11 @@ public static class DbInitializer
             using var createCmd = new NpgsqlCommand(createTableSql, conn);
             createCmd.ExecuteNonQuery();
 
-            logger.LogInformation("'products' table created.");
+            Logger.Info("'products' table created.");
         }
         else
         {
-            logger.LogInformation("'products' table already exists.");
+            Logger.Info("'products' table already exists.");
         }
     }
 }
