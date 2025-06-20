@@ -15,10 +15,10 @@ namespace ProductDashboard.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            product.DateAdded = DateTime.UtcNow;
+            product.dateadded = DateTime.UtcNow;
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
+            return CreatedAtAction(nameof(Get), new { id = product.id }, product);
         }
 
         [HttpGet]

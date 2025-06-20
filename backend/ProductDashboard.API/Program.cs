@@ -13,15 +13,17 @@ LogManager.Setup();
 var settings = builder.Configuration.Get<Settings>()!;
 
 DbInitializer.EnsureDatabase(settings.DbConnectionString, settings.ProductsDbName);
-DbInitializer.EnsureTables(settings.DbConnectionString);
-
 var realDbConn = new NpgsqlConnectionStringBuilder(settings.DbConnectionString)
 {
     Database = settings.ProductsDbName
 }.ToString();
+DbInitializer.EnsureTables(realDbConn, settings.ProductTableName);
+
+builder.Services.AddSingleton(settings);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(realDbConn));
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -31,6 +33,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors(policy =>
+    policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader());
+
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();

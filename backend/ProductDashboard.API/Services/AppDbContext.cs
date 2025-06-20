@@ -1,12 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductDashboard.API.Models;
 
-
-namespace ProductDashboard.API.Services;
-
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
+    private readonly string _productTableName;
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, Settings settings)
+        : base(options)
+    {
+        _productTableName = settings.ProductTableName;
     }
+
     public DbSet<Product> Products { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Override default EF table mapping to use your configured table name
+        modelBuilder.Entity<Product>().ToTable(_productTableName);
+    }
 }

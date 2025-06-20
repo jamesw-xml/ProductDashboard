@@ -2,11 +2,11 @@
 
 public class Product
 {
-    public int Id { get; set; }
-    public string Category { get; set; }
-    public string Name { get; set; }
-    public string ProductCode { get; set; }
-    public decimal Price { get; set; }
-    public int StockQuantity { get; set; }
-    public DateTime DateAdded { get; set; }
+    public int id { get; set; }
+    public string category { get; set; }
+    public string name { get; set; }
+    public string productcode { get; set; }
+    public decimal price { get; set; }
+    public int stockquantity { get; set; }
+    public DateTime dateadded { get; set; }
 }
