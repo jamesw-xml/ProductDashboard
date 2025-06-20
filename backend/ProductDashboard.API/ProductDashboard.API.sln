@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDashboard.API", "ProductDashboard.API.csproj", "{A57ED3FA-6828-0986-3748-C35545EF4B00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductDashboard.Tests", "..\ProductDashboard.Tests\ProductDashboard.Tests.csproj", "{8FA18DF1-B391-10AD-DF57-B158BAC30E30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A57ED3FA-6828-0986-3748-C35545EF4B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57ED3FA-6828-0986-3748-C35545EF4B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57ED3FA-6828-0986-3748-C35545EF4B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57ED3FA-6828-0986-3748-C35545EF4B00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA18DF1-B391-10AD-DF57-B158BAC30E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA18DF1-B391-10AD-DF57-B158BAC30E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA18DF1-B391-10AD-DF57-B158BAC30E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA18DF1-B391-10AD-DF57-B158BAC30E30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDCE83FE-6437-4AC2-9F3E-58693D10E097}
+	EndGlobalSection
+EndGlobal
