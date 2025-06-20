@@ -10,16 +10,7 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-
-export type Product = {
-  id: number;
-  name: string;
-  productcode: string;
-  category: string;
-  price: number;
-  stockquantity: number;
-  dateadded: string;
-};
+import { Product } from "../../../next.types";
 
 export default function Table({ products }: { products: Product[] }) {
   const [globalFilter, setGlobalFilter] = useState("");

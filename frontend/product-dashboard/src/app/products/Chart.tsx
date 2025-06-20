@@ -2,7 +2,7 @@
 
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title } from "chart.js";
-import { Product } from "./Table";
+import { Product } from "../../../next.types";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title);
 
 export default function Chart({ products }: { products: Product[] }) {

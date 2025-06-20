@@ -75,7 +75,6 @@ public static class DbInitializer
             Logger.Info($"'{tableName}' table already exists.");
         }
 
-        // 🔍 Check if the table has any data
         string countSql = $"SELECT COUNT(*) FROM {tableName}";
         using var countCmd = new NpgsqlCommand(countSql, conn);
         var count = Convert.ToInt32(countCmd.ExecuteScalar());
