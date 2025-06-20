@@ -10,7 +10,8 @@ export default function ProductLoader() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:5096/api/Product") // correct your URL here
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+    axios.get(`${apiUrl}/Product`) // correct your URL here
       .then(res => setProducts(res.data))
       .catch(() => setError("Failed to fetch products"));
   }, []);

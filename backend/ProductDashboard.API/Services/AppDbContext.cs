@@ -15,7 +15,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Override default EF table mapping to use your configured table name
         modelBuilder.Entity<Product>().ToTable(_productTableName);
     }
 }

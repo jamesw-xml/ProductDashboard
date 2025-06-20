@@ -7,6 +7,7 @@ import {
   useReactTable,
   flexRender,
   getFilteredRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
@@ -22,7 +23,7 @@ export type Product = {
 
 export default function Table({ products }: { products: Product[] }) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState<any[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo<ColumnDef<Product>[]>(
     () => [
