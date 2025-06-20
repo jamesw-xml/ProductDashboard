@@ -21,7 +21,7 @@ export default function ProductLoader() {
 
   if (error) return <p className="text-red-500">{error}</p>;
   if (loading) return (
-    <div className="flex justify-center items-center py-4">
+    <div className="flex justify-center items-center py-4" role="status">
       <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
