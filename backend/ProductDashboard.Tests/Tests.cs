@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductDashboard.API.Controllers;
 using ProductDashboard.API.Models;
-using ProductDashboard.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using NUnit.Framework;
 using FluentAssertions;
 
