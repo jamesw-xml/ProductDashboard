@@ -1,7 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import ProductLoader from "../src/app/products/ProductLoader";
 import axios from "axios";
 import React from "react";
+import Chart from "../src/app/products/Chart";
+import Table from "../src/app/products/Table";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -25,3 +28,24 @@ describe("ProductLoader", () => {
     await waitFor(() => expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument());
   });
 });
+
+describe("Chart", () => {
+  jest.mock("react-chartjs-2", () => ({
+  ...jest.requireActual("react-chartjs-2"),
+  Bar: jest.fn((x) => x),
+}));
+  it("renders chart title and canvas", () => {
+    render(<Chart products={mockProducts} />);
+    expect(screen.getByText(/stock per category/i)).toBeInTheDocument();
+    expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(screen.getByTestId("bar")).toBeInTheDocument();
+  });
+})
+
+describe("Table", () => {
+  it("renders table with products", async () => {
+    render(<Table products={mockProducts} />);    
+    expect(screen.getByText("Test")).toBeInTheDocument();
+    expect(screen.getByText("Test2")).toBeInTheDocument();
+  });
+})

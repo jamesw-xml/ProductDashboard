@@ -67,25 +67,28 @@ public class ProductControllerTests
     [Test]
     public async Task Get_ReturnsAllProducts()
     {
-        _context.Products.Add(new Product
+        List<Product> mockProducts = new List<Product>()
         {
-            name = "P1",
-            category = "Cat",
-            productcode = "CODE1",
-            price = 10,
-            stockquantity = 5,
-            dateadded = DateTime.UtcNow
-        });
-
-        _context.Products.Add(new Product
-        {
-            name = "P2",
-            category = "Cat",
-            productcode = "CODE2",
-            price = 20,
-            stockquantity = 10,
-            dateadded = DateTime.UtcNow
-        });
+            new Product
+            {
+                name = "Product 1",
+                category = "Category 1",
+                productcode = "CODE1",
+                price = 10.0m,
+                stockquantity = 5,
+                dateadded = DateTime.UtcNow
+            },
+            new Product
+            {
+                name = "Product 2",
+                category = "Category 2",
+                productcode = "CODE2",
+                price = 20.0m,
+                stockquantity = 10,
+                dateadded = DateTime.UtcNow
+            }
+        };
+        _context.Products.AddRange(mockProducts);
 
         await _context.SaveChangesAsync();
 
@@ -95,5 +98,6 @@ public class ProductControllerTests
         var products = result!.Value as List<Product>;
         products.Should().NotBeNull();
         products!.Should().HaveCount(2);
+        products.Should().BeEquivalentTo(mockProducts);
     }
 }

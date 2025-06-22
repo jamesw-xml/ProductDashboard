@@ -25,7 +25,7 @@
     return (
       <div className="bg-white p-4 rounded shadow">
         <h2 className="text-xl font-semibold mb-2">Stock per Category</h2>
-        <Bar data={data} />
+        <Bar data-testid="bar" data={data} />
       </div>
     );
   }
