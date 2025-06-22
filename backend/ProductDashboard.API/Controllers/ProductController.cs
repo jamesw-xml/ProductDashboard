@@ -18,7 +18,7 @@ namespace ProductDashboard.API.Controllers
             product.dateadded = DateTime.UtcNow;
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = product.id }, product);
+            return CreatedAtAction(nameof(Create), new { id = product.id }, product);
         }
 
         [HttpGet]

@@ -7,7 +7,8 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const mockProducts = [
-  { id: 1, name: "Test", productcode: "T1", category: "Cat", price: 10, stockquantity: 5, dateadded: "2024-01-01" }
+  { id: 1, name: "Test", productcode: "T1", category: "Cat", price: 10, stockquantity: 5, dateadded: "2024-01-01" },
+  { id: 2, name: "Test2", productcode: "T2", category: "Cat2", price: 10, stockquantity: 5, dateadded: "2024-01-01" }
 ];
 
 describe("ProductLoader", () => {
