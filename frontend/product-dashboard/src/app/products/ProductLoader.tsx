@@ -8,6 +8,7 @@ import { Product } from "../../../next.types";
 
 export default function ProductLoader() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[] | undefined>(undefined);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +20,10 @@ export default function ProductLoader() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleFilterProduct = (category: string | null) => {
+    setFilteredProducts(category ?  products.filter(product => product.category === category) : products);
+  }
+
   if (error) return <p className="text-red-500">{error}</p>;
   if (loading) return (
     <div className="flex justify-center items-center py-4" role="status">
@@ -27,8 +32,8 @@ export default function ProductLoader() {
   );
   return (
     <div>
-      <Chart products={products} />
-      <Table products={products} />
+      <Chart products={products} filterProduct={handleFilterProduct} />
+      <Table products={filteredProducts ?? products} />
     </div>
   );
 }
