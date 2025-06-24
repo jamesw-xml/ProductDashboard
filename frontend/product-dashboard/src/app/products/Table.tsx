@@ -1,71 +1,51 @@
 "use client";
 
-import {
-  ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-  flexRender,
-  getFilteredRowModel,
-  SortingState,
-} from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "../../../next.types";
 
 export default function Table({ products }: { products: Product[] }) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<{ key: keyof Product; direction: "asc" | "desc" } | null>(null);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
-  const columns = useMemo<ColumnDef<Product>[]>(
-    () => [
-      {
-        accessorKey: "name",
-        header: "Name",
-      },
-      {
-        accessorKey: "productcode",
-        header: "Product Code",
-      },
-      {
-        accessorKey: "category",
-        header: "Category",
-      },
-      {
-        accessorKey: "price",
-        header: "Price",
-        cell: (info) => `£${info.getValue<number>().toFixed(2)}`,
-      },
-      {
-        accessorKey: "stockquantity",
-        header: "Stock",
-      },
-      {
-        accessorKey: "dateadded",
-        header: "Date Added",
-        cell: (info) => new Date(info.getValue<string>()).toLocaleDateString(),
-      },
-    ],
-    []
-  );
+  useEffect(() => {
+    let filtered = products;
+    if (globalFilter) {
+      const filter = globalFilter.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(filter) ||
+          p.productcode.toLowerCase().includes(filter)
+      );
+    }
+    if (sorting) {
+      filtered = [...filtered].sort((a, b) => {
+        const aValue = a[sorting.key];
+        const bValue = b[sorting.key];
+        if (aValue < bValue) return sorting.direction === "asc" ? -1 : 1;
+        if (aValue > bValue) return sorting.direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+    setFilteredProducts(filtered);
+  }, [products, globalFilter, sorting]);
 
-  const table = useReactTable({
-    data: products,
-    columns,
-    state: {
-      globalFilter,
-      sorting,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: (row, columnId, filterValue) => {
-      if (columnId === "name" || columnId === "productcode") {
-        return row.getValue<string>(columnId).toLowerCase().includes(filterValue.toLowerCase());
-      }
-      return true;
-    },
-  });
+  const columns: { key: keyof Product; label: string; render?: (value: Product[keyof Product]) => React.ReactNode }[] = [
+    { key: "name", label: "Name" },
+    { key: "productcode", label: "Product Code" },
+    { key: "category", label: "Category" },
+    { key: "price", label: "Price", render: (v) => `£${Number(v).toFixed(2)}` },
+    { key: "stockquantity", label: "Stock" },
+    { key: "dateadded", label: "Date Added", render: (v) => new Date(v).toLocaleDateString() },
+  ];
+
+  const handleSort = (key: keyof Product) => {
+    setSorting((prev) => {
+      if (!prev || prev.key !== key) return { key, direction: "asc" };
+      if (prev.direction === "asc") return { key, direction: "desc" };
+      return null;
+    });
+  };
 
   return (
     <div className="bg-white p-4 rounded shadow">
@@ -78,28 +58,25 @@ export default function Table({ products }: { products: Product[] }) {
       />
       <table className="min-w-full border text-sm">
         <thead className="bg-gray-100">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                  className="p-2 cursor-pointer select-none"
-                >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                  {header.column.getIsSorted() === "asc" && " ▲"}
-                  {header.column.getIsSorted() === "desc" && " ▼"}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                onClick={() => handleSort(col.key)}
+                className="p-2 cursor-pointer select-none"
+              >
+                {col.label}
+                {sorting?.key === col.key && (sorting.direction === "asc" ? " ▲" : " ▼")}
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
+          {filteredProducts.map((row) => (
             <tr key={row.id} className="border-t">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="p-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              {columns.map((col) => (
+                <td key={col.key as string} className="p-2">
+                  {col.render ? col.render(row[col.key]) : row[col.key]}
                 </td>
               ))}
             </tr>

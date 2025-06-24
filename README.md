@@ -57,6 +57,8 @@ The frontend uses the following environment variable:
 
 In the root folder, there is a docker compose file and a .env file which provides variables for the database, frontend and backend. Adjust this .env file to your needs.
 
+Do not commit this env file, it is to be removed for any production releases.
+
 From the terminal run:
 
 ```bash
