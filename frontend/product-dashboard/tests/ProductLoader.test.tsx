@@ -22,6 +22,17 @@ describe("ProductLoader", () => {
     await waitFor(() => expect(screen.getByText("Test")).toBeInTheDocument());
   });
 
+    it("renders loading spinner and then products and then chart filters", async () => {
+    mockedAxios.get.mockResolvedValueOnce({ data: mockProducts });
+    render(<ProductLoader />);
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("Test")).toBeInTheDocument());
+    screen.getByTestId("Cat-bar").click();
+    await waitFor(() => {
+      expect(screen.queryByText("Test2")).not.toBeInTheDocument();
+    });
+  });
+
   it("shows error on fetch fail", async () => {
     mockedAxios.get.mockRejectedValueOnce(new Error("fail"));
     render(<ProductLoader />);
@@ -30,15 +41,12 @@ describe("ProductLoader", () => {
 });
 
 describe("Chart", () => {
-  jest.mock("react-chartjs-2", () => ({
-  ...jest.requireActual("react-chartjs-2"),
-  Bar: jest.fn((x) => x),
-}));
-  it("renders chart title and canvas", () => {
-    render(<Chart products={mockProducts} />);
+  it("renders chart title", () => {
+    render(<Chart products={mockProducts} filterProduct={() => {}} />);
     expect(screen.getByText(/stock per category/i)).toBeInTheDocument();
-    expect(screen.getByRole("img")).toBeInTheDocument();
-    expect(screen.getByTestId("bar")).toBeInTheDocument();
+    mockProducts.forEach(product => {
+      expect(screen.getByTestId(product.category)).toBeInTheDocument();
+    });
   });
 })
 

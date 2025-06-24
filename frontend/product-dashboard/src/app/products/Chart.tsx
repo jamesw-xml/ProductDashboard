@@ -12,7 +12,6 @@ export default function Chart({
 }) {
   const [clickedCategory, setClickedCategory] = useState<string | null>(null);
 
-  // Calculate stock per category
   const stockPerCategory = useMemo(() => {
     return products.reduce((acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + item.stockquantity;
@@ -30,13 +29,14 @@ export default function Chart({
   return (
     <div className="bg-white p-4 rounded shadow">
       <h2 className="text-xl font-semibold mb-2">Stock per Category</h2>
-      <div className="flex items-end gap-4 h-56 mt-6">
+      <div className="flex items-end gap-4 h-56 mt-6 justify-center">
         {Object.entries(stockPerCategory).map(([category, value]) => (
-          <div key={category} className="flex flex-col items-center">
+          <div key={category} data-testid={category} className="flex flex-col items-center">
             <button
+              data-testid={`${category}-bar`}
               style={{
                 height: `${(value / max) * 200}px`,
-                width: "40px",
+                width: '10rem',
                 background:
                   clickedCategory === category
                     ? "rgb(37 99 235)"
